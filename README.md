@@ -1,5 +1,16 @@
 # CRM
 <h1>Proyecto personal CRM</h1>
+<p>Datos del proyecto</p>
+<ul>
+    <li><a href="https://www.typescriptlang.org/">Documento</a></li>
+    <li><a href="https://taiga-ui.dev/">trackingtime</a></li>
+    <li><a href="">Figman</a></li>
+</ul>
+<ul>
+    <li><a href="https://www.typescriptlang.org/">TypeScrip</a></li>
+    <li><a href="https://taiga-ui.dev/">Taiga</a></li>
+    <li><a href="https://shoelace.style/">shoelace</a</li>
+</ul>
 <p>
     Este proyecto personal de un CRM para una empresa fisticia compuesto de una 
     api en Java Spring, comunicado a un front web de Angular y a otro de Android
