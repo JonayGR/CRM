@@ -17,4 +17,7 @@ public class TicketService {
     public List<Ticket> getAllTicket(){
         return ticketRepository.findAll();
     }
+    public List<Ticket> getTicketByTrabajador(Long id){
+        return ticketRepository.findAllByTrabajadores_Id(id).orElse(null);
+    }
 }

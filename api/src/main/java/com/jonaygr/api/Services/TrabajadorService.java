@@ -1,5 +1,7 @@
 package com.jonaygr.api.Services;
 
+import com.jonaygr.api.DTOs.TokenAuth;
+import com.jonaygr.api.JWT.JwtService;
 import com.jonaygr.api.Models.Users.Roles;
 import com.jonaygr.api.Models.Users.Trabajador;
 import com.jonaygr.api.Repositories.RolesRepository;
@@ -9,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.context.annotation.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -37,7 +41,10 @@ public class TrabajadorService  implements UserDetailsService {
     @Lazy
     @Autowired
     private PasswordEncoder passwordEncoder;
-    private String userMail;
+
+
+    @Autowired
+    private JwtService jwtService;
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -45,21 +52,31 @@ public class TrabajadorService  implements UserDetailsService {
     }
 
     public String createTrabajador(Trabajador newTrabajador){
+
+        newTrabajador.setPassword(passwordEncoder.encode(newTrabajador.getPassword()));
+
         if(newTrabajador.getRoles()== null|| newTrabajador.getRoles().isEmpty()){
             Set<Roles> defaulRoles= new HashSet<>();
-            Roles trabajadorRole=null;//cambiar
+            Roles trabajadorRole=getOrCreateRole("ROLE_TRABAJADOR");
             defaulRoles.add(trabajadorRole);
             newTrabajador.setRoles(defaulRoles);
         }
         else {
             Set<Roles> existenRoles= new HashSet<>();
             newTrabajador.getRoles().forEach(n->{
-                //rellenar
+                existenRoles.add(getOrCreateRole(n.getRole()));
             });
         }
         trabajadorRepository.save(newTrabajador);
-        return "";
+        return TokenAuth.builder()
+                .token(jwtService.getToken(User.builder()
+                        .username(newTrabajador.getCorreo())
+                        .password(newTrabajador.getPassword())
+                        .authorities(getAuthorities(newTrabajador.getRoles()))
+                        .build()))
+                .build().getToken();
     }
+
     private Collection<? extends GrantedAuthority> getAuthorities(Collection<Roles>roles){
         return roles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.getRole()))
@@ -67,7 +84,7 @@ public class TrabajadorService  implements UserDetailsService {
     }
     @Override
     public UserDetails loadUserByUsername(String userMail) throws UsernameNotFoundException {
-        this.userMail = userMail;
+
         Optional<Trabajador> userOptional = trabajadorRepository.findByEmail(userMail);
         Trabajador usuarios = userOptional.orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + userMail));
 
@@ -77,6 +94,24 @@ public class TrabajadorService  implements UserDetailsService {
                 .authorities(getAuthorities(usuarios.getRoles()))
                 .build();
 
+    }
+
+
+    public TokenAuth authenticateUser(String userMail, String password) {
+        Trabajador usuarios = trabajadorRepository.findByEmail(userMail)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + userMail));
+
+        if (!passwordEncoder.matches(password, usuarios.getPassword())) {
+            throw new BadCredentialsException("Credenciales inválidas");
+        }
+
+        return TokenAuth.builder()
+                .token(jwtService.getToken(User.builder()
+                        .username(usuarios.getCorreo())
+                        .password(usuarios.getPassword())
+                        .authorities(getAuthorities(usuarios.getRoles()))
+                        .build()))
+                .build();
     }
 
     public Trabajador loadUserDefault(String userMail) throws UsernameNotFoundException {
@@ -92,6 +127,9 @@ public class TrabajadorService  implements UserDetailsService {
     }
     public void deleteTrabajadorById(long id){trabajadorRepository.deleteById(id);}
     public Optional<Trabajador> getTrabajadorById(long id){return trabajadorRepository.findById(id);}
+
+
+    //Roles
     public Roles getOrCreateRole(String roleName) {
         Optional<Roles> existingRole = rolesRepository.findByRole(roleName);
         return existingRole.orElseGet(() -> (Roles) rolesRepository.save(new Roles(roleName)));
