@@ -21,7 +21,7 @@ public class Trabajador extends UsuarioBase{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "trabajador_id", nullable = false)
-    private int trabajadorId;
+    private Long trabajadorId;
     @Basic
     @NotBlank(message = "No se puede dejar vacio la contraseña")
     @NotNull(message = "No puede ser nulo la contraseña")

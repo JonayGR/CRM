@@ -10,6 +10,6 @@ import java.util.Optional;
 public interface TicketRepository extends JpaRepository<Ticket,Long> {
 
 
-    Optional<List<Ticket>>findAllByTrabajadores_Id(Long id);
+    Optional<List<Ticket>>findAllByTrabajadores_trabajadorId(Long id);
 
 }

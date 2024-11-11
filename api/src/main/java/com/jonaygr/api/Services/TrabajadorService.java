@@ -6,14 +6,12 @@ import com.jonaygr.api.Models.Users.Roles;
 import com.jonaygr.api.Models.Users.Trabajador;
 import com.jonaygr.api.Repositories.RolesRepository;
 import com.jonaygr.api.Repositories.TrabajadorRepository;
-import jakarta.validation.constraints.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.context.annotation.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -85,7 +83,7 @@ public class TrabajadorService  implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String userMail) throws UsernameNotFoundException {
 
-        Optional<Trabajador> userOptional = trabajadorRepository.findByEmail(userMail);
+        Optional<Trabajador> userOptional = trabajadorRepository.findByCorreo(userMail);
         Trabajador usuarios = userOptional.orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + userMail));
 
         return org.springframework.security.core.userdetails.User.builder()
@@ -98,7 +96,7 @@ public class TrabajadorService  implements UserDetailsService {
 
 
     public TokenAuth authenticateUser(String userMail, String password) {
-        Trabajador usuarios = trabajadorRepository.findByEmail(userMail)
+        Trabajador usuarios = trabajadorRepository.findByCorreo(userMail)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + userMail));
 
         if (!passwordEncoder.matches(password, usuarios.getPassword())) {
@@ -115,7 +113,7 @@ public class TrabajadorService  implements UserDetailsService {
     }
 
     public Trabajador loadUserDefault(String userMail) throws UsernameNotFoundException {
-        Optional<Trabajador> userOptional = trabajadorRepository.findByEmail(userMail);
+        Optional<Trabajador> userOptional = trabajadorRepository.findByCorreo(userMail);
         return userOptional.orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + userMail));
     }
 
@@ -134,7 +132,12 @@ public class TrabajadorService  implements UserDetailsService {
         Optional<Roles> existingRole = rolesRepository.findByRole(roleName);
         return existingRole.orElseGet(() -> (Roles) rolesRepository.save(new Roles(roleName)));
     }
-
+    public List<Roles> getAllRoles() {
+        return rolesRepository.findAll();
+    }
+    public void saveTrabajador(Trabajador trabajador) {
+        trabajadorRepository.save(trabajador);
+    }
 
 
 }

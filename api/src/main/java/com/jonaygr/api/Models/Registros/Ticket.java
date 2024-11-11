@@ -16,7 +16,7 @@ public class Ticket extends RegistroBase{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "ticket_id", nullable = false)
-    private int ticketId;
+    private Long ticketId;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JsonBackReference
