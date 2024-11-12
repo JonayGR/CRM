@@ -25,6 +25,7 @@
 <ul>
     <li><a href="https://kotlinlang.org/">Kotling</a</li>
     <li><a href="https://developer.android.com/courses/pathways/compose?hl=es-419">Compose<a></li>
+    <li>Gson</li>
 </ul>
 <h2>Api</h2>
 <ul>
