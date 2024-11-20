@@ -35,5 +35,10 @@ public class UsuarioBase {
     @Max(100)
     int edad;
 
+    @Basic
+    @Column(name = "telefono", nullable = false)
+    int telefono;
+
+
 
 }

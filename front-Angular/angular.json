@@ -27,12 +27,24 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "node_modules/@taiga-ui/icons/src",
+                "output": "assets/taiga-ui/icons"
+              }
             ],
             "styles": [
+              "node_modules/@taiga-ui/core/styles/taiga-ui-theme.less",
+              "node_modules/@taiga-ui/core/styles/taiga-ui-fonts.less",
+              "node_modules/ngx-toastr/toastr.css",
+              "@shoelace-style/shoelace/dist/themes/light.css",
               "src/styles.scss"
+  
             ],
-            "scripts": [],
+            "scripts": [
+              
+            ],
             "server": "src/main.server.ts",
             "prerender": true,
             "ssr": {
@@ -102,5 +114,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "350b3149-8b9c-4d08-8c0d-902599cc6068"
   }
 }
