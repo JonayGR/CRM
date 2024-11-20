@@ -12,14 +12,13 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.crm_android.ui.tikect.TikectFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
-
+        android:id="@+id/vacacionesFragment"
+        android:name="com.example.crm_android.ui.vacaciones.VacacionesFragment"
+        android:label="fragment_vacaciones"
+        tools:layout="@layout/fragment_vacaciones" />
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.crm_android.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/ticketFragment"
+        android:name="com.example.crm_android.ui.ticket.ticketFragment"
+        android:label="fragment_ticket"
+        tools:layout="@layout/fragment_ticket" />
 </navigation>
