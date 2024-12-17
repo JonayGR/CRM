@@ -10,6 +10,14 @@
     <string name="menu_home">Home</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="secondary_text">Settings</string>
+    <string name="supporting_text">Settings</string>
+    <string name="action_1">Settings</string>
+    <string name="action_2">borrar</string>
+    <string name="content_description_media">Settings</string>
+    <string name="title">Settings</string>
+
+
     
     
 </resources>
